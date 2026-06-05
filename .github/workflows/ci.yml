@@ -23,11 +23,9 @@ jobs:
           --health-retries=5
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
@@ -64,11 +62,9 @@ jobs:
           --health-retries=5
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
 
@@ -80,23 +76,17 @@ jobs:
       - name: Start backend server
         run: |
           cd backend
-          npm start > backend.log 2>&1 &
-          sleep 20
-          # Verify the process is still running
-          if ! pgrep -f "node" > /dev/null; then
-            echo "Backend process failed to start"
-            cat backend/backend.log
-            exit 1
-          fi
+          node server.js &
         env:
           MONGODB_URI: mongodb://localhost:27017/todo-test
 
-      - name: Check backend logs
-        if: failure()
-        run: cat backend/backend.log
-
       - name: Wait for backend
-        run: npx wait-on http://localhost:4000 --timeout 60000
+        run: npx wait-on http://localhost:4000
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
