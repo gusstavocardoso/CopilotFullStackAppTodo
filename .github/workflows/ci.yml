@@ -81,7 +81,13 @@ jobs:
         run: |
           cd backend
           npm start > backend.log 2>&1 &
-          sleep 15
+          sleep 20
+          # Verify the process is still running
+          if ! pgrep -f "node" > /dev/null; then
+            echo "Backend process failed to start"
+            cat backend/backend.log
+            exit 1
+          fi
         env:
           MONGODB_URI: mongodb://localhost:27017/todo-test
 
@@ -90,7 +96,7 @@ jobs:
         run: cat backend/backend.log
 
       - name: Wait for backend
-        run: npx wait-on http://localhost:4000 --timeout 30000
+        run: npx wait-on http://localhost:4000 --timeout 60000
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
