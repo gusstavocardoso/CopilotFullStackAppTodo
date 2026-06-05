@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Frontend para app de To-Do com React",
   "main": "src/index.js",
+  "engines": {
+    "node": ">= 20"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
