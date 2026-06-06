@@ -11,8 +11,10 @@ app.use(cors());
 app.use(express.json());
 
 // Conexão com MongoDB
-mongoose.connect('mongodb://localhost:27017/todoapp')
-  .then(() => console.log('MongoDB conectado'))
+const MONGO_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/todoapp';
+
+mongoose.connect(MONGO_URI)
+  .then(() => console.log('MongoDB conectado:', MONGO_URI))
   .catch(err => console.error('Erro ao conectar MongoDB:', err));
 
 // Rotas principais
